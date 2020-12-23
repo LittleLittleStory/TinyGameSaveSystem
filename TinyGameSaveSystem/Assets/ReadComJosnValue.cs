@@ -74,13 +74,13 @@ public class ReadComJosnValue
         for (int i = 0; i < comValue.Count; i++)
         {
             SceneData CV = JsonMapper.ToObject<SceneData>(comValue[i].ToJson());
-            D_SComValue.Add(CV.SceneID, CV);
+            D_SComValue.Add(CV.SceneName, CV);
             L_SComValue.Add(CV);
         }
     }
     public void ReadCom(SceneData comValue)
     {
-        foreach (ComValue item in comValue.NeedChangeObj)
+        /*foreach (ComValue item in comValue.NeedChangeObj)
         {
             GameObject obj = GameObject.Find(item.Name);
             if (obj == null)
@@ -100,8 +100,7 @@ public class ReadComJosnValue
             {
                 Debug.LogError(item.Name + "，未找到");
             }
-
-        }
+        }*/
     }
 
     public GameObject GetOBJ(GameObject obj, string path)

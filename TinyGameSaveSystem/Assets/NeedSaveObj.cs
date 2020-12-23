@@ -45,7 +45,7 @@ public class NeedSaveObj : MonoBehaviour
     /// </summary>
     private void SaveScene(SceneData comValue)
     {
-        ReadComJosnValue.GetRCV().ReadSceneData();
+        /*ReadComJosnValue.GetRCV().ReadSceneData();
         ReadComJosnValue.GetRCV().L_SComValue.Clear();
         if (ReadComJosnValue.GetRCV().D_SComValue.ContainsKey(SceneManager.GetActiveScene().name))
         {
@@ -58,7 +58,7 @@ public class NeedSaveObj : MonoBehaviour
         foreach (var item in ReadComJosnValue.GetRCV().D_SComValue.Values)
         {
             ReadComJosnValue.GetRCV().L_SComValue.Add(item);
-        }
+        }*/
         //ToJson接口将你的列表类传进去，，并自动转换为string类型
         string json = JsonMapper.ToJson(GetGameSceneData());
         string filePath;
@@ -97,7 +97,7 @@ public class NeedSaveObj : MonoBehaviour
         ReadComJosnValue.GetRCV().ReadSceneData();
         for (int i = 0; i < ReadComJosnValue.GetRCV().L_SComValue.Count; i++)
         {
-            if (ReadComJosnValue.GetRCV().L_SComValue[i].SceneID == SceneManager.GetActiveScene().name)
+            if (ReadComJosnValue.GetRCV().L_SComValue[i].SceneName == SceneManager.GetActiveScene().name)
             {
                 ReadComJosnValue.GetRCV().ReadCom(ReadComJosnValue.GetRCV().L_SComValue[i]);
                 break;

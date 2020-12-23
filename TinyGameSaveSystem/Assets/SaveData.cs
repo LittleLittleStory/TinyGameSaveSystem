@@ -4,39 +4,44 @@ using UnityEngine;
 
 public class SceneData
 {
-    public string SceneID { get; set; }
-    public List<ComValue> NeedChangeObj { get; set; }
+    public string SceneName { get; set; }
+    public Dictionary<string, ComValue> NeedChangeObj { get; set; }
     public SceneData()
     {
-        NeedChangeObj = new List<ComValue>();
+        NeedChangeObj = new Dictionary<string, ComValue>();
+    }
+
+    public SceneData(string sceneName)
+    {
+        SceneName = sceneName;
+        NeedChangeObj = new Dictionary<string, ComValue>();
     }
 }
 
 public class ComValue
 {
     public string Name { get; set; }
-    public Dictionary<string, ComValueOper> Values { get; set; }
-
+    public Dictionary<string, Dictionary<string, SetValue>> SetValues { get; set; }
     public ComValue()
     {
-        Values = new Dictionary<string, ComValueOper>();
+        SetValues = new Dictionary<string, Dictionary<string, SetValue>>();
+    }
+
+    public ComValue(string name)
+    {
+        Name = name;
+        SetValues = new Dictionary<string, Dictionary<string, SetValue>>();
     }
 }
 
-public class ComValueOper
+public class SetValue
 {
-    public string Opear { get; set; }
+    public string AttributeName { get; set; }
     public string Value { get; set; }
 }
 
-public enum Opera 
-{ 
-    ReadWrite,
-    Fun
-}
 
-public class ComValueOper
+public interface IFunOpera
 {
-    public string Opear { get; set; }
-    public string Value { get; set; }
+    void FunOpera();
 }

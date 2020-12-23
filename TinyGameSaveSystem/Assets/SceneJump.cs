@@ -45,7 +45,7 @@ public class SceneJump : MonoBehaviour
     /// </summary>
     public void GameSave(string curDialogID = "")
     {
-        comValue = new SceneData
+        /*comValue = new SceneData
         {
             SceneID = sceneName
         };
@@ -54,7 +54,7 @@ public class SceneJump : MonoBehaviour
             item.ReadComValues();
             comValue.NeedChangeObj.Add(ReadValue(item));
         }
-        Save(comValue, sceneName, curDialogID);
+        Save(comValue, sceneName, curDialogID);*/
     }
 
     public NeedSaveObj GetNeedSaveOBJ()
