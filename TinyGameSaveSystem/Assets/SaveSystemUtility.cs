@@ -9,27 +9,47 @@ public static class SaveSystemUtility
         return ToolUtility.LoadJson<SceneData>(sceneName);
     }
 
-    public static void Save<T1, T2>(this GameObject gameObject, string value)where T2: IFunOpera
+    public static void Save<T1, T2>(this T1 component, string value)
+        where T1 : Component
+        where T2 : IFunOpera
+    {
+        if (component.CheckEmpty())
+            return;
+        if (component.gameObject.CheckEmpty())
+            return;
+        Save<T1, T2>(component.gameObject.name, value);
+    }
+
+    public static void Save<T1, T2>(this GameObject gameObject, string value)
+        where T2 : IFunOpera
     {
         if (gameObject.CheckEmpty())
+            return;
+        Save<T1, T2>(gameObject.name, value);
+    }
+
+    private static void Save<T1, T2>(string name, string value)
+        where T2 : IFunOpera
+    {
+        if (string.IsNullOrEmpty(name))
             return;
         SceneData sceneData = GetSceneData("test");
         if (sceneData.CheckEmpty())
             sceneData = new SceneData();
         ComValue comValue;
-        if (false == sceneData.NeedChangeObj.ContainsKey(gameObject.name))
+        if (false == sceneData.NeedChangeObj.ContainsKey(name))
         {
-            comValue = new ComValue();
-            sceneData.NeedChangeObj.Add(gameObject.name, comValue);
+            comValue = new ComValue(name);
+            sceneData.NeedChangeObj.Add(name, comValue);
         }
         else
         {
-            comValue = sceneData.NeedChangeObj[gameObject.name];
+            comValue = sceneData.NeedChangeObj[name];
         }
         Dictionary<string, SetValue> setValues;
         SetValue setValue = new SetValue
         {
-            AttributeName = typeof(T2).Name,
+            FunOpera = typeof(T2).Name,
             Value = value
         };
 

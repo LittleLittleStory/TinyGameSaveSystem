@@ -1,1 +1,1 @@
-{"SceneName":null,"NeedChangeObj":{"Cube":{"Name":null,"SetValues":{"Transform":{"TestFun":{"AttributeName":"TestFun","Value":"(0.0, 0.0, 0.0)"}}}}}}
+{"SceneName":null,"NeedChangeObj":{"Cube":{"Name":"Cube","SetValues":{"Transform":{"TestFun":{"FunOpera":"TestFun","Value":"(1.0, 1.0, 1.0)"}}}},"Sphere":{"Name":"Sphere","SetValues":{"Transform":{"TestFun":{"FunOpera":"TestFun","Value":"(1.0, 1.0, 1.0)"}}}}}}

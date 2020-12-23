@@ -8,7 +8,9 @@ public class SaveTest : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            gameObject.Save<Transform, TestFun>(transform.position.ToString());
+            transform.Save<Transform, TestFun>(transform.position.ToString());
+            transform.transform.position = new Vector3(1, 1, 1);
+            transform.Save<Transform, TestFun>(transform.position.ToString());
         }
     }
 

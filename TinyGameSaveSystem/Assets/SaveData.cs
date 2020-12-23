@@ -36,7 +36,7 @@ public class ComValue
 
 public class SetValue
 {
-    public string AttributeName { get; set; }
+    public string FunOpera { get; set; }
     public string Value { get; set; }
 }
 
