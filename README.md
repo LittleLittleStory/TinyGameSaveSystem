@@ -1,6 +1,6 @@
 # TinyGameSaveSystem
 基于Json序列化，为游戏提供可靠的存档系统。
-只需要继承并实现指定接口，便可以存取任何你想要的组件与数值
+只需要继承并实现指定接口，便可以存取任何你想要的组件与数值。
 ```csharp
 public class DebugPos : IFunOpera<Transform>
 {
