@@ -8,16 +8,16 @@ public class SaveTest : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            transform.Save<Transform, TestFun>(transform.position.ToString());
+            gameObject.Save<Transform, DebugPos>(transform.position.ToString());
             GameSaveUtility.SaveGame();
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            transform.Load<Transform, TestFun>();
+            gameObject.Load<Transform, DebugPos>();
         }
     }
 }
-public class TestFun : IFunOpera<Transform>
+public class DebugPos : IFunOpera<Transform>
 {
     public void FunOpera(Transform component, string value)
     {
