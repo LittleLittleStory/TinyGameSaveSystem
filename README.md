@@ -19,3 +19,8 @@ gameObject.Save<Transform, DebugPos>(transform.position.ToString());
 ```csharp
 gameObject.Load<Transform, DebugPos>();
 ```
+
+全局数据尚未做，现在只能存储继承了Mono挂载在场景对象上的数据~
+
+
+会持续更新维护~
