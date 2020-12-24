@@ -82,6 +82,15 @@ public static class GameSaveUtility
             return null;
     }
 
+    /// <summary>
+    /// 保存，只写进内存中的存档
+    /// </summary>
+    /// <typeparam name="T1">你希望保存组件对象类型</typeparam>
+    /// <typeparam name="T2">赋值操作对象类型。
+    /// 请务必保证该类型中的泛型，是你希望保存组件对象类型</typeparam>
+    /// <param name="gameObject">gameObject</param>
+    /// <param name="value">保存的值</param>
+    /// <param name="sceneName">场景名，不填为当前场景</param>
     public static void Save<T1, T2>(this GameObject gameObject, string value, string sceneName = "")
         where T2 : IFunOpera<T1>
     {
@@ -130,6 +139,15 @@ public static class GameSaveUtility
             setValues.Add(funOperaName, setValue);
     }
 
+    /// <summary>
+    ///  读取内存中的存档值
+    /// </summary>
+    /// <typeparam name="T1">你希望保存组件对象类型</typeparam>
+    /// <typeparam name="T2">赋值操作对象类型。
+    /// 请务必保证该类型中的泛型，是你希望保存组件对象类型</typeparam>
+    /// <param name="gameObject">gameObject</param>
+    /// <param name="sceneName">场景名，不填为当前场景</param>
+    /// <returns></returns>
     public static bool Load<T1, T2>(this GameObject gameObject, string sceneName = "")
         where T1 : Component
         where T2 : IFunOpera<T1>

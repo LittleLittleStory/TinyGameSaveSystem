@@ -59,7 +59,10 @@ public class SetValue
     public string Value { get; set; }
 }
 
-
+/// <summary>
+/// 统一赋值操作接口
+/// </summary>
+/// <typeparam name="T">你希望保存组件对象类型</typeparam>
 public interface IFunOpera<T>
 {
     void FunOpera(T component,string value);
