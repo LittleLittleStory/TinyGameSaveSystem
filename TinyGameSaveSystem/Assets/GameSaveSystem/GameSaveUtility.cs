@@ -15,6 +15,41 @@ public static class GameSaveUtility
             return SingletonManager.GetSingleton<GameSaveSystem>();
         }
     }
+
+
+    private static SceneData AddSceneData(string sceneName)
+    {
+        if (gameSaveSystem.GameData.SceneDatas.ContainsKey(sceneName))
+        {
+            Debug.LogError(string.Format("存档已存在{0}对应的场景", sceneName));
+            return null;
+        }
+        else
+        {
+            SceneData sceneData = new SceneData(sceneName);
+            gameSaveSystem.GameData.SceneDatas.Add(sceneName, sceneData);
+            return sceneData;
+        }
+    }
+
+    private static SaveObject AddSaveObject(string name, string sceneName)
+    {
+        SceneData sceneData = GetSceneData(sceneName);
+        if (null == sceneData)
+            AddSceneData(sceneName);
+        if (sceneData.SaveObjects.ContainsKey(name))
+        {
+            Debug.LogError(string.Format("存档已存在{0}对应的物体", name));
+            return null;
+        }
+        else
+        {
+            SaveObject saveObject = new SaveObject(name);
+            sceneData.SaveObjects.Add(name, saveObject);
+            return saveObject;
+        }
+    }
+
     public static void SaveGame()
     {
         ToolUtility.SaveJson(gameSaveSystem.GameData, "GameData");
@@ -63,24 +98,19 @@ public static class GameSaveUtility
             return;
         string componentName = typeof(T1).Name;
         string funOperaName = typeof(T2).Name;
+
         SceneData sceneData = GetSceneData(sceneName);
         if (null == sceneData)
-        {
-            sceneData = new SceneData(sceneName);
-            gameSaveSystem.GameData.SceneDatas.Add(sceneName, sceneData);
-        }
+            AddSceneData(sceneName);
         SaveObject saveObject = GetSaveObjectData(name, sceneName);
         if (null == saveObject)
-        {
-            saveObject = new SaveObject(name);
-            sceneData.SaveObjects.Add(name, saveObject);
-        }
+            saveObject = AddSaveObject(name, sceneName);
+
         SetValue setValue = new SetValue
         {
             FunOpera = funOperaName,
             Value = value
         };
-
         if (saveObject.SetValues.CheckEmpty())
             saveObject.SetValues = new Dictionary<string, Dictionary<string, SetValue>>();
         Dictionary<string, SetValue> setValues;
@@ -100,38 +130,39 @@ public static class GameSaveUtility
             setValues.Add(funOperaName, setValue);
     }
 
-    public static void Load<T1, T2>(this GameObject gameObject, string sceneName = "")
+    public static bool Load<T1, T2>(this GameObject gameObject, string sceneName = "")
         where T1 : Component
         where T2 : IFunOpera<T1>
     {
         string componentName = typeof(T1).Name;
         string funOperaName = typeof(T2).Name;
         if (gameObject.CheckEmpty())
-            return;
+            return false;
         T1 component = gameObject.GetComponent<T1>();
         if (component.CheckEmpty())
-            return;
+            return false;
 
         SaveObject saveObject = GetSaveObjectData(gameObject.name, sceneName);
-        if (null==saveObject)
+        if (null == saveObject)
         {
             Debug.LogError(string.Format("存档未找到{0}对应的物体", gameObject.name));
-            return;
+            return false;
         }
         if (false == saveObject.SetValues.ContainsKey(componentName))
         {
             Debug.LogError(string.Format("存档未找到{0}对应的组件类型", componentName));
-            return;
+            return false;
         }
         Dictionary<string, SetValue> setValues = saveObject.SetValues[componentName];
         if (false == setValues.ContainsKey(funOperaName))
         {
             Debug.LogError(string.Format("存档未找到{0}对应的赋值操作类型", funOperaName));
-            return;
+            return false;
         }
         SetValue setValue = setValues[funOperaName];
         T2 funOpera = (T2)CreateHelperInstance(funOperaName, assemblyNames);
         funOpera.FunOpera(component, setValue.Value);
+        return true;
     }
 
     /// <summary>
