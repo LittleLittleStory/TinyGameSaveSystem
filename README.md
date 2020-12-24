@@ -14,7 +14,7 @@ public class DebugPos : IFunOpera<Transform>
 ```csharp
 gameObject.Save<Transform, DebugPos>(transform.position.ToString());
 ```
-读取，具体的读取操作将在**FunOpera()**方法内执行,具体如何执行需要各位自己编写~
+读取，具体的读取操作将在FunOpera()方法内执行,具体如何执行需要各位自己编写~
 ```csharp
 gameObject.Load<Transform, DebugPos>();
 ```
