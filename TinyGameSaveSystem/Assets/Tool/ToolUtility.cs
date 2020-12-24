@@ -2,11 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 public static class ToolUtility
 {
+    /// <summary>
+    /// 序列化对象转为Json
+    /// </summary>
+    /// <param name="saveData"></param>
+    /// <param name="path"></param>
     public static void SaveJson(object saveData, string path)
     {
         //ToJson接口将你的列表类传进去，，并自动转换为string类型
@@ -26,6 +32,12 @@ public static class ToolUtility
 #endif
     }
 
+    /// <summary>
+    /// 反序列化Json转为对象
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="path"></param>
+    /// <returns></returns>
     public static T LoadJson<T>(string path)
     {
         string textAsset;
@@ -208,24 +220,73 @@ public static class ToolUtility
         return true;
     }
 
+    /// <summary>
+    /// 获得指定子物体到父物体的路径
+    /// </summary>
+    /// <param name="child"></param>
+    /// <param name="parent"></param>
+    /// <returns></returns>
     public static string GetNamePathToParent(Transform child, Transform parent)
     {
-        if (null == child || null == parent)
-        {
+        if (child.CheckEmpty() || parent.CheckEmpty())
             return "";
-        }
 
-        string retPath = child.name;
+        string path = child.name;
         Transform tempParent = child.parent;
         while (tempParent != null)
         {
             if (tempParent == parent)
-            {
-                return retPath;
-            }
-            retPath = tempParent.name + "/" + retPath;
+                return path;
+            path = string.Format("{0}/{1}", tempParent.name, path);
             tempParent = tempParent.parent;
         }
         return "";
+    }
+
+    /// <summary>
+    /// 获得目标物体在场景下的完整路径
+    /// </summary>
+    /// <param name="transform"></param>
+    /// <returns></returns>
+    public static string GetNamePathToScene(Transform transform)
+    {
+        if (transform.CheckEmpty())
+            return "";
+        string path = transform.name;
+        Transform tempParent = transform.parent;
+        if (null != tempParent)
+            path = transform.parent.gameObject.name + "/" + path;
+        while (null != tempParent)
+        {
+            if (tempParent.parent != null)
+            {
+                tempParent = tempParent.parent;
+                path = tempParent.name + "/" + path;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return path;
+    }
+
+    /// <summary>
+    /// 获得场景内所有对象包括不活跃的
+    /// </summary>
+    /// <returns></returns>
+    private static List<GameObject> GetAllSceneObjectsWithInactive()
+    {
+        var allTransforms = Resources.FindObjectsOfTypeAll(typeof(Transform));
+        var previousSelection = Selection.objects;
+        Selection.objects = allTransforms.Cast<Transform>()
+            .Where(x => x != null)
+            .Select(x => x.gameObject)
+            .Cast<UnityEngine.Object>().ToArray();
+
+        var selectedTransforms = Selection.GetTransforms(SelectionMode.Editable | SelectionMode.ExcludePrefab);
+        Selection.objects = previousSelection;
+
+        return selectedTransforms.Select(tr => tr.gameObject).ToList();
     }
 }
