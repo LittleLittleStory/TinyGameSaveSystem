@@ -1,1 +1,23 @@
-{"SceneDatas":{"SampleScene":{"SceneName":"SampleScene","SaveObjects":{"Cube":{"Name":"Cube","SetValues":{"Transform":{"DebugPos":{"FunOpera":"DebugPos","Value":"(0.0, 0.0, 0.0)"}}}}}}},"GobalDatas":{}}
+
+{
+    "SceneDatas" : {
+        "SampleScene" : {
+            "SceneName" : "SampleScene",
+            "SaveObjects" : {
+                "Cube" : {
+                    "Name" : "Cube",
+                    "SetValues" : {
+                        "Transform" : {
+                            "DebugPos" : {
+                                "FunOpera" : "DebugPos",
+                                "Value"    : "\r\n{\r\n    \"x\" : 4.1399998664856,\r\n    \"y\" : 5.09000015258789,\r\n    \"z\" : 0.0\r\n}"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "GobalDatas" : {
+    }
+}

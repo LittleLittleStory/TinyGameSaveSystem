@@ -170,7 +170,7 @@ namespace LitJson
             hex_seq = new char[4];
             indentation = 0;
             indent_value = 4;
-            pretty_print = false;
+            pretty_print = true;
             validate = true;
             lower_case_properties = false;
 
@@ -335,6 +335,17 @@ namespace LitJson
             if (str.IndexOf ('.') == -1 &&
                 str.IndexOf ('E') == -1)
                 writer.Write (".0");
+
+            context.ExpectingValue = false;
+        }
+
+        public void Write(float number)
+        {
+            DoValidation(Condition.Value);
+            PutNewline();
+
+            string str = Convert.ToString(number, number_format);
+            Put(str);
 
             context.ExpectingValue = false;
         }

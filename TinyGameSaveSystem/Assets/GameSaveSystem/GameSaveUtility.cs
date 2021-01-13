@@ -96,16 +96,24 @@ public static class GameSaveUtility
     {
         if (gameObject.CheckEmpty())
             return;
-        T2 aaa = gameObject.GetComponent<T2>();
-        if (aaa.CheckEmpty())
+        T2 component = gameObject.GetComponent<T2>();
+        if (component.CheckEmpty())
             return;
 
         sceneName = string.IsNullOrEmpty(sceneName) == true ? SceneManager.GetActiveScene().name : sceneName;
 
         string ISaveName = typeof(T1).Name;
         T1 ISave = (T1)ToolUtility.CreateHelperInstance(ISaveName, assemblyNames);
-        string value=  ISave.Save(aaa);
-
+        string value;
+        try
+        {
+            value = ISave.Save(component);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex);
+            return;
+        }
         Save<T1, T2>(gameObject.name, value, sceneName);
     }
 

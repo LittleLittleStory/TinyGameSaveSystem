@@ -22,11 +22,11 @@ public class DebugPos : ISave<Transform>
 {
     public string Save(Transform component)
     {
-        return JsonMapper.ToJson(component);
+        return JsonMapper.ToJson(component.position);
     }
 
     public void Load(Transform component, string value)
     {
-        Debug.Log(value);
+        component.position = JsonMapper.ToObject<Vector3>(value);
     }
 }
