@@ -2,25 +2,56 @@
 基于Json序列化，为游戏提供可靠的存档系统。
 
 只需要继承并实现指定接口，便可以存取任何你想要的组件与数值。
+组件：
 ```csharp
-public class DebugPos : IFunOpera<Transform>
+public class SavePos : ISave<Transform>
 {
-    public void FunOpera(Transform component, string value)
+    public string Save(Transform component)
     {
-        Debug.Log(value);
+        return JsonMapper.ToJson(component.position);
+    }
+
+    public void Load(Transform component, string value)
+    {
+        component.position = JsonMapper.ToObject<Vector3>(value);
     }
 }
 ```
 保存
 ```csharp
-gameObject.Save<Transform, DebugPos>(transform.position.ToString());
+transform.SaveComponent<SavePos, Transform>();
 ```
-读取，具体的读取操作将在FunOpera()方法内执行,具体如何执行需要各位自己编写~
+读取
 ```csharp
-gameObject.Load<Transform, DebugPos>();
+gameObject.LoadComponent<SavePos, Transform>();
 ```
 
-全局数据尚未做，现在只能存储继承了Mono挂载在场景对象上的数据~
+全局数据
+```csharp
+public class GobalTest
+{
+    public string test;
+}
 
+public class GobalTestDebug : ISave<GobalTest>
+{
+    public string Save(GobalTest component)
+    {
+        return component.test;
+    }
 
-会持续更新维护~
+    public void Load(GobalTest component, string value)
+    {
+        component.test = value;
+        Debug.Log(component.test);
+    }
+}
+```
+保存
+```csharp
+gobalTest.SaveGobal<GobalTestDebug, GobalTest>();
+```
+读取
+```csharp
+gobalTest.LoadGobal<GobalTestDebug, GobalTest>();
+```
