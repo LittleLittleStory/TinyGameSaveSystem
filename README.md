@@ -26,7 +26,8 @@ transform.SaveComponent<SavePos, Transform>();
 gameObject.LoadComponent<SavePos, Transform>();
 ```
 
-全局数据
+
+全局数据：
 ```csharp
 public class GobalTest
 {
