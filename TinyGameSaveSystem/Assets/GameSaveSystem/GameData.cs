@@ -14,10 +14,16 @@ public class GameData
 
 public class GobalData
 {
-    public Dictionary<string, SetValue> SetValues { get; set; }
+    public string Name { get; set; }
+    public Dictionary<string, Dictionary<string, SetValue>> SetValues { get; set; }
     public GobalData()
     {
-        SetValues = new Dictionary<string, SetValue>();
+        SetValues = new Dictionary<string, Dictionary<string, SetValue>>();
+    }
+    public GobalData(string name)
+    {
+        Name = name;
+        SetValues = new Dictionary<string, Dictionary<string, SetValue>>();
     }
 }
 
