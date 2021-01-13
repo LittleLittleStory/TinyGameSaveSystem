@@ -10,19 +10,19 @@ public class GobalTest
 
 public class SaveTest : MonoBehaviour
 {
-    GobalTest gobalTest = new GobalTest();
+GobalTest gobalTest = new GobalTest();
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            gameObject.Save<SavePos, Transform>();
-            gobalTest.Save<GobalTestDebug, GobalTest>();
+            transform.SaveComponent<SavePos, Transform>();
+            gobalTest.SaveGobal<GobalTestDebug, GobalTest>();
             GameSaveUtility.SaveGame();
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            gameObject.Load<SavePos, Transform>();
-            gobalTest.Load<GobalTestDebug, GobalTest>();
+            gameObject.LoadComponent<SavePos, Transform>();
+            gobalTest.LoadGobal<GobalTestDebug, GobalTest>();
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
