@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class GameData
 {
-    public Dictionary<string,SceneData> SceneDatas { get; set; }
+    public Dictionary<string, SceneData> SceneDatas { get; set; }
     public Dictionary<string, GobalData> GobalDatas { get; set; }
     public GameData()
     {
@@ -63,7 +63,8 @@ public class SetValue
 /// 统一赋值操作接口
 /// </summary>
 /// <typeparam name="T">你希望保存组件对象类型</typeparam>
-public interface IFunOpera<T>
+public interface ISave<T>
 {
-    void FunOpera(T component,string value);
+    string Save(T component);
+    void Load(T component, string value);
 }

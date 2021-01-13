@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using LitJson;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,18 +9,23 @@ public class SaveTest : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            gameObject.Save<Transform, DebugPos>(transform.position.ToString());
+            gameObject.Save<DebugPos, Transform>();
             GameSaveUtility.SaveGame();
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            gameObject.Load<Transform, DebugPos>();
+            gameObject.Load<DebugPos, Transform>();
         }
     }
 }
-public class DebugPos : IFunOpera<Transform>
+public class DebugPos : ISave<Transform>
 {
-    public void FunOpera(Transform component, string value)
+    public string Save(Transform component)
+    {
+        return JsonMapper.ToJson(component);
+    }
+
+    public void Load(Transform component, string value)
     {
         Debug.Log(value);
     }

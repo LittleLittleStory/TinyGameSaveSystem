@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -269,13 +270,13 @@ public static class ToolUtility
             }
         }
         return path;
-    }
+    } 
 
     /// <summary>
     /// 获得场景内所有对象包括不活跃的
     /// </summary>
     /// <returns></returns>
-    private static List<GameObject> GetAllSceneObjectsWithInactive()
+    public static List<GameObject> GetAllSceneObjectsWithInactive()
     {
         var allTransforms = Resources.FindObjectsOfTypeAll(typeof(Transform));
         var previousSelection = Selection.objects;
@@ -288,5 +289,23 @@ public static class ToolUtility
         Selection.objects = previousSelection;
 
         return selectedTransforms.Select(tr => tr.gameObject).ToList();
+    }
+
+    /// <summary>
+    /// 反射创建实例
+    /// </summary>
+    public static object CreateHelperInstance(string funOperaName, string[] assemblyNames)
+    {
+        foreach (string assemblyName in assemblyNames)
+        {
+            Assembly assembly = Assembly.Load(assemblyName);
+
+            object instance = assembly.CreateInstance(funOperaName);
+            if (instance != null)
+            {
+                return instance;
+            }
+        }
+        return null;
     }
 }

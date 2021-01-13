@@ -85,28 +85,37 @@ public static class GameSaveUtility
     /// <summary>
     /// 保存，只写进内存中的存档
     /// </summary>
-    /// <typeparam name="T1">你希望保存组件对象类型</typeparam>
-    /// <typeparam name="T2">赋值操作对象类型。
+    /// <typeparam name="T1">赋值操作对象类型。
+    ///<typeparam name="T2">你希望保存组件对象类型</typeparam>
     /// 请务必保证该类型中的泛型，是你希望保存组件对象类型</typeparam>
     /// <param name="gameObject">gameObject</param>
     /// <param name="value">保存的值</param>
     /// <param name="sceneName">场景名，不填为当前场景</param>
-    public static void Save<T1, T2>(this GameObject gameObject, string value, string sceneName = "")
-        where T2 : IFunOpera<T1>
+    public static void Save<T1, T2>(this GameObject gameObject, string sceneName = "")
+        where T1 : ISave<T2>
     {
         if (gameObject.CheckEmpty())
             return;
+        T2 aaa = gameObject.GetComponent<T2>();
+        if (aaa.CheckEmpty())
+            return;
+
         sceneName = string.IsNullOrEmpty(sceneName) == true ? SceneManager.GetActiveScene().name : sceneName;
+
+        string ISaveName = typeof(T1).Name;
+        T1 ISave = (T1)ToolUtility.CreateHelperInstance(ISaveName, assemblyNames);
+        string value=  ISave.Save(aaa);
+
         Save<T1, T2>(gameObject.name, value, sceneName);
     }
 
     private static void Save<T1, T2>(string name, string value, string sceneName)
-    where T2 : IFunOpera<T1>
+    where T1 : ISave<T2>
     {
         if (string.IsNullOrEmpty(name))
             return;
-        string componentName = typeof(T1).Name;
-        string funOperaName = typeof(T2).Name;
+        string ISaveName = typeof(T1).Name;
+        string componentName = typeof(T2).Name;
 
         SceneData sceneData = GetSceneData(sceneName);
         if (null == sceneData)
@@ -117,7 +126,7 @@ public static class GameSaveUtility
 
         SetValue setValue = new SetValue
         {
-            FunOpera = funOperaName,
+            FunOpera = ISaveName,
             Value = value
         };
         if (saveObject.SetValues.CheckEmpty())
@@ -133,30 +142,30 @@ public static class GameSaveUtility
             saveObject.SetValues.Add(componentName, setValues);
         }
 
-        if (setValues.ContainsKey(funOperaName))
-            setValues[funOperaName] = setValue;
+        if (setValues.ContainsKey(ISaveName))
+            setValues[ISaveName] = setValue;
         else
-            setValues.Add(funOperaName, setValue);
+            setValues.Add(ISaveName, setValue);
     }
 
     /// <summary>
     ///  读取内存中的存档值
     /// </summary>
-    /// <typeparam name="T1">你希望保存组件对象类型</typeparam>
-    /// <typeparam name="T2">赋值操作对象类型。
+    /// <typeparam name="T1">赋值操作对象类型。
+    /// <typeparam name="T2">你希望保存组件对象类型</typeparam>
     /// 请务必保证该类型中的泛型，是你希望保存组件对象类型</typeparam>
     /// <param name="gameObject">gameObject</param>
     /// <param name="sceneName">场景名，不填为当前场景</param>
     /// <returns></returns>
     public static bool Load<T1, T2>(this GameObject gameObject, string sceneName = "")
-        where T1 : Component
-        where T2 : IFunOpera<T1>
+        where T1 : ISave<T2>
+        where T2 : Component
     {
-        string componentName = typeof(T1).Name;
-        string funOperaName = typeof(T2).Name;
+        string ISaveName = typeof(T1).Name;
+        string componentName = typeof(T2).Name;
         if (gameObject.CheckEmpty())
             return false;
-        T1 component = gameObject.GetComponent<T1>();
+        T2 component = gameObject.GetComponent<T2>();
         if (component.CheckEmpty())
             return false;
 
@@ -172,32 +181,14 @@ public static class GameSaveUtility
             return false;
         }
         Dictionary<string, SetValue> setValues = saveObject.SetValues[componentName];
-        if (false == setValues.ContainsKey(funOperaName))
+        if (false == setValues.ContainsKey(ISaveName))
         {
-            Debug.LogError(string.Format("存档未找到{0}对应的赋值操作类型", funOperaName));
+            Debug.LogError(string.Format("存档未找到{0}对应的赋值操作类型", ISaveName));
             return false;
         }
-        SetValue setValue = setValues[funOperaName];
-        T2 funOpera = (T2)CreateHelperInstance(funOperaName, assemblyNames);
-        funOpera.FunOpera(component, setValue.Value);
+        SetValue setValue = setValues[ISaveName];
+        T1 ISave = (T1)ToolUtility.CreateHelperInstance(ISaveName, assemblyNames);
+        ISave.Load(component, setValue.Value);
         return true;
-    }
-
-    /// <summary>
-    /// 创建FunOpera实例
-    /// </summary>
-    private static object CreateHelperInstance(string funOperaName, string[] assemblyNames)
-    {
-        foreach (string assemblyName in assemblyNames)
-        {
-            Assembly assembly = Assembly.Load(assemblyName);
-
-            object instance = assembly.CreateInstance(funOperaName);
-            if (instance != null)
-            {
-                return instance;
-            }
-        }
-        return null;
     }
 }
