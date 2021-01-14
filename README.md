@@ -44,7 +44,6 @@ public class GobalTestDebug : ISave<GobalTest>
     public void Load(GobalTest component, string value)
     {
         component.test = value;
-        Debug.Log(component.test);
     }
 }
 ```
