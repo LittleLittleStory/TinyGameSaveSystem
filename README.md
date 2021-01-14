@@ -2,7 +2,7 @@
 基于Json序列化，为游戏提供可靠的存档系统。
 
 只需要继承并实现指定接口，便可以存取任何你想要的组件与数值。
-组件：
+Unity内置Mono组件或自定义Mono脚本：
 ```csharp
 public class SavePos : ISave<Transform>
 {
@@ -27,7 +27,7 @@ gameObject.LoadComponent<SavePos, Transform>();
 ```
 
 
-全局数据：
+全局数据，不继承Mono的脚本：
 ```csharp
 public class GobalTest
 {
