@@ -56,3 +56,4 @@ gobalTest.SaveGobal<GobalTestDebug, GobalTest>();
 ```csharp
 gobalTest.LoadGobal<GobalTestDebug, GobalTest>();
 ```
+使用的Json解析库是马三大佬魔改的LitJson，链接:https://github.com/XINCGer/LitJson4Unity
